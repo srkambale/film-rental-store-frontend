@@ -155,8 +155,10 @@
             const container = document.getElementById('fields-container');
             container.innerHTML = '';
 
-            if (['POST', 'PUT', 'PATCH'].includes(window.currentEndpoint.method) && window.currentEndpoint.sampleBody) {
+            if (['GET', 'POST', 'PUT', 'PATCH'].includes(window.currentEndpoint.method) && window.currentEndpoint.sampleBody) {
                 fieldsSection.style.display = 'block';
+                const sectionTitle = window.currentEndpoint.method === 'GET' ? 'Query Parameters' : 'Data Entry Form';
+                fieldsSection.querySelector('h4').innerText = sectionTitle;
                 try {
                     const sample = JSON.parse(window.currentEndpoint.sampleBody);
                     Object.keys(sample).forEach(key => {
@@ -206,7 +208,7 @@
             });
             document.getElementById('form-url').value = finalUrl;
 
-            if (['POST', 'PUT', 'PATCH'].includes(window.currentEndpoint.method)) {
+            if (['GET', 'POST', 'PUT', 'PATCH'].includes(window.currentEndpoint.method)) {
                 const bodyObj = {};
                 document.querySelectorAll('.body-field-input').forEach(input => {
                     bodyObj[input.getAttribute('data-key')] = input.value;
