@@ -70,30 +70,30 @@ public class FrontendController {
                 new EndpointInfo("GET", "/api/v1/films/search/category", "Customer Search: Films by Category", "Any", "{\"category\":\"Action\"}")
             )));
 
-        // Abhishek Rodage: Catalog (Admin) Module
+        // Abhishek Rodage: Catalog and Admin Module
         teamMembers.add(new TeamMember("Abhishek Rodage", "Catalog (Admin) Module", "/images/abhishek.png", "catalog", 
             "Film Catalog Management and Admin Operations",
             Arrays.asList(
                 new EndpointInfo("GET", "/api/v1/catalog/films", "List All Films (Summary)", "Any"),
                 new EndpointInfo("GET", "/api/v1/catalog/films/{id}", "Get Detailed Film Info", "Any"),
                 new EndpointInfo("GET", "/api/v1/catalog/films/search", "Admin Search: Films (Title/Year)", "Any", "{\"title\":\"ACADEMY\",\"year\":\"2006\"}"),
-                new EndpointInfo("GET", "/api/v1/catalog/films/category/{name}", "Filter Films by Genre", "Any", "{\"name\":\"Action\"}"),
-                new EndpointInfo("GET", "/api/v1/catalog/films/actor/{id}", "Films by Actor ID", "Any", "{\"id\":1}"),
+                new EndpointInfo("GET", "/api/v1/catalog/films/category/{categoryName}", "Filter Films by Genre", "Any", "{\"categoryName\":\"Action\"}"),
                 new EndpointInfo("GET", "/api/v1/catalog/films/actor", "Films by Actor Name Query", "Any", "{\"name\":\"PENELOPE\"}"),
                 new EndpointInfo("GET", "/api/v1/catalog/films/language/{name}", "Films by Language", "Any"),
                 new EndpointInfo("GET", "/api/v1/catalog/films/rating/{rating}", "Films by MPAA Rating", "Any"),
+                new EndpointInfo("PATCH", "/api/v1/catalog/films/{id}", "Partial Film Update", "Admin Only", "{\"title\":\"RESERVATION LAKES\",\"rentalRate\":4.99}"),
                 new EndpointInfo("GET", "/api/v1/catalog/actors", "List All Actors", "Any"),
                 new EndpointInfo("GET", "/api/v1/catalog/actors/search", "Search Actors by Name", "Any", "{\"name\":\"PENELOPE\"}"),
                 new EndpointInfo("GET", "/api/v1/catalog/actors/{id}", "Get Actor Details", "Any"),
                 new EndpointInfo("POST", "/api/v1/catalog/actors", "Create New Actor", "Admin Only", "{\"firstName\":\"MARLON\",\"lastName\":\"BRANDO\"}"),
                 new EndpointInfo("PUT", "/api/v1/catalog/actors/{id}", "Update Actor Info", "Admin Only", "{\"firstName\":\"MARLON\",\"lastName\":\"UPDATED\"}"),
-                new EndpointInfo("DELETE", "/api/v1/catalog/actors/{id}", "Remove Actor Record", "Admin Only"),
+                new EndpointInfo("PATCH", "/api/v1/catalog/actors/{id}", "Partial Actor Update", "Admin Only", "{\"lastName\":\"BRANDO UPDATED\"}"),
                 new EndpointInfo("GET", "/api/v1/catalog/categories", "List All Genres/Categories", "Any"),
                 new EndpointInfo("GET", "/api/v1/catalog/categories/search", "Search Categories by Name", "Any", "{\"name\":\"Action\"}"),
                 new EndpointInfo("GET", "/api/v1/catalog/categories/{id}", "Get Category Details", "Any"),
                 new EndpointInfo("POST", "/api/v1/catalog/categories", "Create New Category", "Admin Only", "{\"name\":\"Noir\"}"),
                 new EndpointInfo("PUT", "/api/v1/catalog/categories/{id}", "Update Category Info", "Admin Only", "{\"name\":\"Noir Updated\"}"),
-                new EndpointInfo("DELETE", "/api/v1/catalog/categories/{id}", "Remove Category", "Admin Only"),
+                new EndpointInfo("PATCH", "/api/v1/catalog/categories/{id}", "Partial Category Update", "Admin Only", "{\"name\":\"Film-Noir\"}"),
                 new EndpointInfo("GET", "/api/v1/admin/staff", "Admin Dash: List All Staff", "Admin Only"),
                 new EndpointInfo("GET", "/api/v1/admin/staff/{id}", "Admin Dash: Get Staff by ID", "Admin Only"),
                 new EndpointInfo("GET", "/api/v1/admin/staff/search", "Admin Dash: Search Staff", "Admin Only", "{\"name\":\"Staff\"}"),

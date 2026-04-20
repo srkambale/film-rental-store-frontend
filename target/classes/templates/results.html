@@ -150,9 +150,9 @@
     <script th:inline="javascript">
         // Auto-Auth: Detect login success and save session
         document.addEventListener('DOMContentLoaded', () => {
-            const status = [[${status}]];
-            const url = [[${url}]];
-            const data = [[${data}]];
+            const status = /*[[${status}]]*/ 500;
+            const url = /*[[${url}]]*/ '';
+            const data = /*[[${data}]]*/ null;
 
             if (status === 200 && url === '/api/v1/auth/login' && data && data.token) {
                 localStorage.setItem('api_token', 'Bearer ' + data.token);
