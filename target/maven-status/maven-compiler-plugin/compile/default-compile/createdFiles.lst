@@ -1,0 +1,7 @@
+com\filmrental\frontend\client\BackendClient.class
+com\filmrental\frontend\dto\ApiTestRequest.class
+com\filmrental\frontend\dto\TeamMember.class
+com\filmrental\frontend\dto\EndpointInfo.class
+com\filmrental\frontend\controller\FrontendController$1.class
+com\filmrental\frontend\FrontendApplication.class
+com\filmrental\frontend\controller\FrontendController.class

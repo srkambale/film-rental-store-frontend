@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Team - API Documentation</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <header style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 40px;">
+            <div>
+                <h1 style="margin:0;">Film Rental Store</h1>
+                <p style="margin:5px 0 0 0;">Manage your store API modules below.</p>
+            </div>
+            <div id="auth-status" style="text-align: right; display: none;">
+                <span id="user-display" style="font-weight: 700; color: var(--primary);"></span>
+                <span id="role-display" class="method-badge method-GET" style="margin-left: 8px; font-size: 0.7rem;"></span>
+                <button onclick="logout()" class="back-link" style="margin-left: 15px; border:none; background:none; color: #dc2626; cursor:pointer; font-weight:700;">Logout</button>
+            </div>
+            <div id="no-auth-status">
+                <a th:href="@{/endpoints/auth}" class="try-btn" style="text-decoration:none;">Login / Register</a>
+            </div>
+        </header>
+
+        <div class="team-grid" id="main-grid">
+            <a th:each="member : ${team}" 
+               th:href="@{'/endpoints/' + ${member.moduleId}}" 
+               class="team-card">
+                <img th:src="@{${member.imagePath}}" th:alt="${member.name}" width="180" height="180">
+                <strong th:text="${member.name}">Name</strong>
+                <span th:text="${member.role}" style="color: var(--text-muted); font-size: 0.9rem;">Role</span>
+                <span class="team-link-text">View Endpoints &rarr;</span>
+            </a>
+        </div>
+
+        <footer style="margin-top: 60px; text-align: center; border-top: 1px solid var(--border); padding-top: 20px;">
+            <p>&copy; 2026 Film Rental Store Team</p>
+        </footer>
+    </div>
+
+    <script th:inline="javascript">
+        function logout() {
+            localStorage.removeItem('api_token');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('user_identifier');
+            window.location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentRole = localStorage.getItem('user_role');
+            const userIdentifier = localStorage.getItem('user_identifier');
+
+            // Update Header status
+            if (currentRole && userIdentifier) {
+                document.getElementById('auth-status').style.display = 'block';
+                document.getElementById('no-auth-status').style.display = 'none';
+                document.getElementById('user-display').innerText = userIdentifier;
+                document.getElementById('role-display').innerText = currentRole;
+            }
+        });
+    </script>
+</body>
+</html>

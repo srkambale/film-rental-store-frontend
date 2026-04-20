@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>API Test Results</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <style>
+        .status-pill {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+            font-size: 1rem;
+        }
+        .status-success { background: #dcfce7; color: #059669; }
+        .status-error   { background: #fee2e2; color: #dc2626; }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .result-table th {
+            background: #f1f5f9;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+        }
+        .result-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+        .result-table tr:last-child td { border-bottom: none; }
+        .result-table tr:hover td { background: #f8fafc; }
+        .key-cell { font-weight: 700; color: #475569; background: #f8fafc !important; width: 30%; }
+
+        .raw-error {
+            background: #1e293b;
+            color: #fca5a5;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .backend-url-badge {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--header-bg);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <a th:href="@{'/endpoints/' + ${moduleId}}" class="back-link">&larr; Back to Module</a>
+                <h1 style="margin: 10px 0;">Request Results</h1>
+                <p style="margin: 0;">
+                    <span th:class="'method-badge method-' + ${method}" th:text="${method}">GET</span>
+                    <code style="font-size: 1rem;" th:text="${url}">/api/v1/...</code>
+                </p>
+                <span class="backend-url-badge" th:text="'Proxied to: ' + ${backendUrl}">Backend URL</span>
+            </div>
+            <div th:class="'status-pill ' + (${status < 400} ? 'status-success' : 'status-error')">
+                HTTP <span th:text="${status}">200</span>
+            </div>
+        </div>
+
+        <!-- Error Block -->
+        <div th:if="${error}" style="padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 2px solid #fca5a5; background: #fff5f5;">
+            <h3 style="margin-top: 0; color: #dc2626;">&#9888; Error Response</h3>
+            <pre class="raw-error" th:text="${error}"></pre>
+        </div>
+
+        <!-- Data: List -->
+        <div th:if="${data != null and data instanceof T(java.util.List) and !#lists.isEmpty(data)}">
+            <h3 th:text="'Response Data (' + ${#lists.size(data)} + ' records)'">Results</h3>
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th th:each="entry : ${data[0]}" th:text="${entry.key}">Column</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${data}">
+                        <td th:each="entry : ${item}" th:text="${entry.value}">Value</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Data: Empty List -->
+        <div th:if="${data != null and data instanceof T(java.util.List) and #lists.isEmpty(data)}"
+             style="background: #f1f5f9; padding: 24px; border-radius: 12px; text-align: center; color: #64748b;">
+            <p style="font-size: 1.2rem; margin: 0;">&#128203; No records returned.</p>
+        </div>
+
+        <!-- Data: Single Object (Map) -->
+        <div th:if="${data != null and data instanceof T(java.util.Map)}">
+            <h3>Item Details</h3>
+            <table class="result-table" style="max-width: 640px;">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry : ${data}">
+                        <td class="key-cell" th:text="${entry.key}">Key</td>
+                        <td th:text="${entry.value}">Value</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Data: Other (String/Boolean/Number) -->
+        <div th:if="${data != null and !(data instanceof T(java.util.List)) and !(data instanceof T(java.util.Map))}">
+            <h3>Response</h3>
+            <pre class="raw-error" style="color: #a5f3fc;" th:text="${data}"></pre>
+        </div>
+
+        <!-- No data and no error (e.g. 204 No Content) -->
+        <div th:if="${data == null and error == null}"
+             style="background: #f0fdf4; padding: 24px; border-radius: 12px; text-align: center; color: #059669; border: 2px solid #86efac;">
+            <p style="font-size: 1.2rem; margin: 0;">&#10003; Operation completed successfully.</p>
+        </div>
+
+        <footer style="margin-top: 60px; text-align: center; border-top: 1px solid var(--border); padding: 30px 0; color: var(--text-muted);">
+            <p>&copy; 2026 Film Rental Store Team</p>
+        </footer>
+    </div>
+
+    <script th:inline="javascript">
+        // Auto-Auth: Detect login success and save session
+        document.addEventListener('DOMContentLoaded', () => {
+            const status = [[${status}]];
+            const url = [[${url}]];
+            const data = [[${data}]];
+
+            if (status === 200 && url === '/api/v1/auth/login' && data && data.token) {
+                localStorage.setItem('api_token', 'Bearer ' + data.token);
+                localStorage.setItem('user_role', data.role);
+                localStorage.setItem('user_identifier', data.identifier);
+                console.log('Session saved for role: ' + data.role);
+            }
+        });
+    </script>
+</body>
+</html>
